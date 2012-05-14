@@ -18,7 +18,7 @@ public class Main {
 		try {
 			initializeDb();
 			
-			//test(); // Later, remove this line and start GUI here
+			test(); // Later, remove this line and start GUI here
 			
 			MainFrame.launch();
 

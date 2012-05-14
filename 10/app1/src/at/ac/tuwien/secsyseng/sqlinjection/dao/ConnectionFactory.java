@@ -15,7 +15,7 @@ public class ConnectionFactory {
 	// Sqlite database connection by JDBC SqLite Driver from
 	// http://www.xerial.org/trac/Xerial/wiki/SQLiteJDBC
 
-//	private static String dbFile = "database.db";
+//	private static String dbFile = "unused-database.db";
 	private static String dbFile = ":memory:"; // Use in-memory database
 
 	private static Connection _instance = null;
@@ -27,7 +27,7 @@ public class ConnectionFactory {
 
 		if (_instance == null) {
 			try {
-				System.setProperty("sqlite.purejava", "true");
+				//System.setProperty("sqlite.purejava", "true");
 				Class.forName("org.sqlite.JDBC");
 				_instance = DriverManager
 						.getConnection("jdbc:sqlite:" + dbFile);
