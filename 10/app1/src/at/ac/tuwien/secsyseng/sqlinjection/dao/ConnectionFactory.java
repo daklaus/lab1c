@@ -27,7 +27,7 @@ public class ConnectionFactory {
 
 		if (_instance == null) {
 			try {
-				System.setProperty("sqlite.purejava", "true");
+				//System.setProperty("sqlite.purejava", "true");
 				Class.forName("org.sqlite.JDBC");
 				_instance = DriverManager
 						.getConnection("jdbc:sqlite:" + dbFile);
