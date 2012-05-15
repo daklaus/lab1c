@@ -2,10 +2,7 @@ package at.ac.tuwien.secsyseng.sqlinjection.service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-
 import at.ac.tuwien.secsyseng.sqlinjection.dao.Var3Dao;
-import at.ac.tuwien.secsyseng.sqlinjection.exception.PasswordException;
 
 public class Var3Service {
 
