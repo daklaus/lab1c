@@ -1,0 +1,57 @@
+====================
+app1 - SQL-Injection
+====================
+
+Bei Schwachstelle 1 hat sich unsere Gruppe für "SQL-Injection" entschieden, welche wir durch 3 Varianten in einer JAVA-Applikation abhandeln werden.
+Im Folgenden werden alle 3 Varianten näher beschrieben.
+
+Variante 1:
+===========
+Beschreibung:
+-------------
+Der User wird zu einem Login aufgefordert.
+--> Ist der Login-Versuch erfolgreich, so werden dem User verschiedenste Daten angezeigt.
+--> Andernfalls wird eine Fehlermeldung ausgegeben.
+
+Der User kann über eine Checkbox wählen ob der Login-Modus "sicher" oder "unsicher" ausgeführt werden soll.
+--> Sicher: Die beiden Input-Felder (user, password) werden über prepared statements an die Datenbank gesendet.
+--> Unsicher: Anstatt eines prepared statements wird ein "normales" (unsicheres) statement verwendet.
+
+Implementierte Fehler:
+----------------------
+Wenn der "unsichere" Weg beschritten wird, ist es durch Eingabe von beispielsweise "' or 1=1 --" möglich,
+den Authentifizierungsprozess komplett zu umgehen (user und password müssen somit nicht bekannt sein!).
+Dies geschieht aufgrund des Aufbaues des zugrunde liegenden SQL statements (select * from account where user = 'user' and password = 'pass').
+Durch die Eingabe der oben angeführten Zeichen wird das ganze SQL statement um eine logische or Verknüpfung erweitert, was Authentifizierung somit zu nichte macht.
+
+Dieser Fehler kann jedoch durch die Verwendung so genannter prepared statements oder über Filterung der Eingabeparameter umgangen werden.
+Der Unterschied zwischem prepared und "normalen" statements ist jener, dass bei prepared statements die SQL Abfragen vorkompiliert werden und somit die logische Datenabfrage schon feststeht.
+Danach werden die gekennzeichneten Inputs (werden als "?" gekennzeichnet) befüllt.
+
+
+Variante 2:
+===========
+//TODO
+
+
+Variante 3:
+===========
+//TODO
+
+
+Erforderliche Software:
+=======================
+--> aktuelles Java JDK (ab Version 6)
+--> ant
+--> Anzeigesystem für grafische Objekte (wegen Verwendung von Fenstern in der Applikation)
+
+
+Installation:
+=============
+--> Komlilierung über ant
+--> Start: "ant run"
+
+
+Kompilierung:
+=============
+--> "ant debug"
