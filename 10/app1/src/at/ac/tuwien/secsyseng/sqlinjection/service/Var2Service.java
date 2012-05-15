@@ -2,7 +2,6 @@ package at.ac.tuwien.secsyseng.sqlinjection.service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import at.ac.tuwien.secsyseng.sqlinjection.dao.Var2Dao;
 import at.ac.tuwien.secsyseng.sqlinjection.exception.PasswordException;
 
@@ -25,11 +24,11 @@ public Var2Service () {}
 		ResultSet rs;
 		
 		if (secure) {
-			rs = var2dao.getVar2ResponseSecure(user, password);
+			rs = var2dao.getVar2ResponseSecure(user, password, search);
 			password = null;
 		}
 		else {
-			rs = var2dao.getVar2ResponseUnsecure(user, password);
+			rs = var2dao.getVar2ResponseUnsecure(user, password, search);
 			password = null;
 		}
 		
