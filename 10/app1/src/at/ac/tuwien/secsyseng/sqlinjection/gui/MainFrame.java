@@ -30,8 +30,8 @@ import net.miginfocom.swing.MigLayout;
 public class MainFrame implements ActionListener {
 
 	private JFrame frame;
-	
-	//var1
+
+	// var1
 	private JPanel var1;
 	private JPanel var2;
 	private JPanel var3;
@@ -46,8 +46,8 @@ public class MainFrame implements ActionListener {
 	private JScrollPane var1DataResponseScPane;
 	private JCheckBox secCheck1;
 	private Var1Service var1service;
-	
-	//var2
+
+	// var2
 	private JLabel descLbl2;
 	private JLabel secLbl2;
 	private JLabel userLbl2;
@@ -61,8 +61,8 @@ public class MainFrame implements ActionListener {
 	private Var2Service var2service;
 	private JLabel searchLbl2;
 	private JTextField searchTf2;
-	
-	//var3
+
+	// var3
 	private JLabel descLbl3;
 	private JLabel secLbl3;
 
@@ -76,8 +76,6 @@ public class MainFrame implements ActionListener {
 	private JTextField groupidTf3;
 	private JLabel groupnameLbl3;
 	private JTextField groupnameTf3;
-	
-	
 
 	/**
 	 * Launch the application.
@@ -118,14 +116,16 @@ public class MainFrame implements ActionListener {
 
 		var1 = new JPanel(new MigLayout("", "[][grow][][grow][]",
 				"[][][][grow]"));
-		var2 = new JPanel(new MigLayout("", "[][grow][][grow][]", "[][][][][grow]"));
-		var3 = new JPanel(new MigLayout("", "[][grow][][grow][]", "[][][][][grow]"));
+		var2 = new JPanel(new MigLayout("", "[][grow][][grow][]",
+				"[][][][][grow]"));
+		var3 = new JPanel(new MigLayout("", "[][grow][][grow][]",
+				"[][][][][grow]"));
 
 		app1Pane.addTab("Variante 1: Login-Fail", var1);
 		app1Pane.addTab("Variante 2: Query-Injection", var2);
 		app1Pane.addTab("Variante 3: SQL Injection in INSERT Query", var3);
 
-		//var1
+		// var1
 		descLbl1 = new JLabel(
 				"Description: Login to display data. Default: User=wong Password=dong");
 		secLbl1 = new JLabel("Security (on): ");
@@ -150,8 +150,8 @@ public class MainFrame implements ActionListener {
 		var1.add(passTf1, "cell 3 2,growx");
 		var1.add(loginBtn1, "cell 4 2");
 		var1.add(var1DataResponseScPane, "cell 0 3 5 1,grow");
-		
-		//var2
+
+		// var2
 		descLbl2 = new JLabel(
 				"Description: Search for data of the specified user. Default: User=wong Password=dong");
 		secLbl2 = new JLabel("Security (on): ");
@@ -180,21 +180,39 @@ public class MainFrame implements ActionListener {
 		var2.add(searchTf2, "cell 1 3 3 1,growx");
 		var2.add(loginBtn2, "cell 4 3, align right");
 		var2.add(var2DataResponseScPane, "cell 0 4 5 1,grow");
-		
-		
-		//var3
-		descLbl3 = new JLabel(
-				"Description: Create new groups into database");
+
+		// var3
+		var3service = new Var3Service();
+		descLbl3 = new JLabel("Description: Create new groups into database");
 		secLbl3 = new JLabel("Security (on): ");
 		secCheck3 = new JCheckBox();
-		groupLbl3 = new JLabel ("Create new group: ");
+		groupLbl3 = new JLabel("Create new group: ");
 		groupidLbl3 = new JLabel("group id:");
 		groupidTf3 = new JTextField();
 		groupnameLbl3 = new JLabel("groupname:");
 		groupnameTf3 = new JTextField();
 		var3DataResponse = new JTextArea();
 		var3DataResponseScPane = new JScrollPane(var3DataResponse);
+		try {
+			
+			ResultSet rs = var3service.getvar3Data();
+			boolean nodata = true;
+			if (rs != null) {
+				while (rs.next()) {
+					nodata = false;
+					var3DataResponse.append(rs.getInt("id") + "|"
+							+ rs.getString("name") + "\n");
+				}
+				var3DataResponse.append("\n");
 
+				if (nodata)
+					JOptionPane.showConfirmDialog(null, "No data found",
+							"Info", JOptionPane.CLOSED_OPTION);
+			}
+		} catch (SQLException e1) {
+			JOptionPane.showConfirmDialog(null, e1.getMessage(), "Error",
+					JOptionPane.CLOSED_OPTION);
+		}
 		loginBtn3 = new JButton("Create");
 		loginBtn3.addActionListener(this);
 		loginBtn3.setActionCommand("create");
@@ -232,7 +250,7 @@ public class MainFrame implements ActionListener {
 			try {
 				if (rs != null) {
 					while (rs.next()) {
-						nodata = false;						
+						nodata = false;
 						var1DataResponse.append(rs.getInt("id") + "|"
 								+ rs.getString("product") + "|"
 								+ rs.getString("location") + "|"
@@ -243,14 +261,14 @@ public class MainFrame implements ActionListener {
 						JOptionPane.showConfirmDialog(null, "No data found",
 								"Info", JOptionPane.CLOSED_OPTION);
 					else
-						var2DataResponse.append("\n");
+						var1DataResponse.append("\n");
 				}
 			} catch (SQLException e1) {
 				JOptionPane.showConfirmDialog(null, e1.getMessage(), "Error",
 						JOptionPane.CLOSED_OPTION);
 			}
 		}
-		
+
 		else if (e.getActionCommand().equals("search")) {
 			var2service = new Var2Service();
 			ResultSet rs = null;
@@ -258,7 +276,8 @@ public class MainFrame implements ActionListener {
 
 			try {
 				rs = var2service.transferVar2Response(userTf2.getText(),
-						passTf2.getText(), searchTf2.getText(), secCheck2.isSelected());
+						passTf2.getText(), searchTf2.getText(),
+						secCheck2.isSelected());
 			} catch (SQLException e2) {
 				JOptionPane.showConfirmDialog(null, e2.getMessage(), "Error",
 						JOptionPane.CLOSED_OPTION);
@@ -272,8 +291,7 @@ public class MainFrame implements ActionListener {
 					while (rs.next()) {
 						nodata = false;						
 						var2DataResponse.append(rs.getString(1) + "|"
-								+ rs.getString(2) + "|"
-								+ rs.getString(3) + "|"
+								+ rs.getString(2) + "|" + rs.getString(3) + "|"
 								+ rs.getString(4) + "\n");
 					}
 
@@ -287,15 +305,16 @@ public class MainFrame implements ActionListener {
 				JOptionPane.showConfirmDialog(null, e1.getMessage(), "Error",
 						JOptionPane.CLOSED_OPTION);
 			}
-		}
-		else if (e.getActionCommand().equals("create")) {
-			var3service = new Var3Service();
+		} else if (e.getActionCommand().equals("create")) {
+
 			int update;
 			ResultSet rs = null;
 			boolean nodata = true;
 
 			try {
-				update = var3service.transferVar3Response(Integer.parseInt(groupidTf3.getText()), groupnameTf3.getText(), secCheck3.isSelected());
+				update = var3service.transferVar3Response(
+						Integer.parseInt(groupidTf3.getText()),
+						groupnameTf3.getText(), secCheck3.isSelected());
 			} catch (SQLException e2) {
 				JOptionPane.showConfirmDialog(null, e2.getMessage(), "Error",
 						JOptionPane.CLOSED_OPTION);
