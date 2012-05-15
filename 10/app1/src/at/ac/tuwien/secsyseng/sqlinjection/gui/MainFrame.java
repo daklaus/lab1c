@@ -21,26 +21,44 @@ import javax.swing.UIManager;
 
 import at.ac.tuwien.secsyseng.sqlinjection.exception.PasswordException;
 import at.ac.tuwien.secsyseng.sqlinjection.service.Var1Service;
+import at.ac.tuwien.secsyseng.sqlinjection.service.Var2Service;
 
 import net.miginfocom.swing.MigLayout;
 
 public class MainFrame implements ActionListener {
 
 	private JFrame frame;
+	
+	//var1
 	private JPanel var1;
 	private JPanel var2;
 	private JPanel var3;
-	private JLabel descLbl;
-	private JLabel secLbl;
-	private JLabel userLbl;
-	private JLabel passLbl;
-	private JTextField userTf;
-	private JPasswordField passTf;
-	private JButton loginBtn;
+	private JLabel descLbl1;
+	private JLabel secLbl1;
+	private JLabel userLbl1;
+	private JLabel passLbl1;
+	private JTextField userTf1;
+	private JPasswordField passTf1;
+	private JButton loginBtn1;
 	private JTextArea var1DataResponse;
 	private JScrollPane var1DataResponseScPane;
-	private JCheckBox secCheck;
+	private JCheckBox secCheck1;
 	private Var1Service var1service;
+	
+	//var2
+	private JLabel descLbl2;
+	private JLabel secLbl2;
+	private JLabel userLbl2;
+	private JLabel passLbl2;
+	private JTextField userTf2;
+	private JPasswordField passTf2;
+	private JButton loginBtn2;
+	private JTextArea var2DataResponse;
+	private JScrollPane var2DataResponseScPane;
+	private JCheckBox secCheck2;
+	private Var2Service var2service;
+	private JLabel searchLbl2;
+	private JTextField searchTf2;
 
 	/**
 	 * Launch the application.
@@ -81,49 +99,117 @@ public class MainFrame implements ActionListener {
 
 		var1 = new JPanel(new MigLayout("", "[][grow][][grow][]",
 				"[][][][grow]"));
-		var2 = new JPanel(new MigLayout("", "[]", "[]"));
+		var2 = new JPanel(new MigLayout("", "[][grow][][grow][]", "[][][][][grow]"));
 		var3 = new JPanel(new MigLayout("", "[]", "[]"));
 
 		app1Pane.addTab("Variante 1: Login-Fail", var1);
-		app1Pane.addTab("Variante 2: ...", var2);
+		app1Pane.addTab("Variante 2: Query-Injection", var2);
 		app1Pane.addTab("Variante 2: ...", var3);
 
-		descLbl = new JLabel(
+		//var1
+		descLbl1 = new JLabel(
 				"Description: Login to display data. Default: User=wong Password=dong");
-		secLbl = new JLabel("Security (on): ");
-		userLbl = new JLabel("User:");
-		passLbl = new JLabel("Password:");
-		secCheck = new JCheckBox();
-		userTf = new JTextField();
-		passTf = new JPasswordField();
+		secLbl1 = new JLabel("Security (on): ");
+		userLbl1 = new JLabel("User:");
+		passLbl1 = new JLabel("Password:");
+		secCheck1 = new JCheckBox();
+		userTf1 = new JTextField();
+		passTf1 = new JPasswordField();
 		var1DataResponse = new JTextArea();
 		var1DataResponseScPane = new JScrollPane(var1DataResponse);
 
-		loginBtn = new JButton("Login");
-		loginBtn.addActionListener(this);
-		loginBtn.setActionCommand("login");
+		loginBtn1 = new JButton("Login");
+		loginBtn1.addActionListener(this);
+		loginBtn1.setActionCommand("login2");
 
-		var1.add(descLbl, "cell 0 0 5 1");
-		var1.add(secLbl, "cell 0 1 5 1");
-		var1.add(secCheck, "cell 0 1 5 1");
-		var1.add(userLbl, "cell 0 2");
-		var1.add(userTf, "cell 1 2,growx");
-		var1.add(passLbl, "cell 2 2");
-		var1.add(passTf, "cell 3 2,growx");
-		var1.add(loginBtn, "cell 4 2");
+		var1.add(descLbl1, "cell 0 0 5 1");
+		var1.add(secLbl1, "cell 0 1 5 1");
+		var1.add(secCheck1, "cell 0 1 5 1");
+		var1.add(userLbl1, "cell 0 2");
+		var1.add(userTf1, "cell 1 2,growx");
+		var1.add(passLbl1, "cell 2 2");
+		var1.add(passTf1, "cell 3 2,growx");
+		var1.add(loginBtn1, "cell 4 2");
 		var1.add(var1DataResponseScPane, "cell 0 3 5 1,grow");
+		
+		//var2
+		descLbl2 = new JLabel(
+				"Description: Search for data of the specified user. Default: User=wong Password=dong");
+		secLbl2 = new JLabel("Security (on): ");
+		userLbl2 = new JLabel("User:");
+		passLbl2 = new JLabel("Password:");
+		secCheck2 = new JCheckBox();
+		userTf2 = new JTextField();
+		passTf2 = new JPasswordField();
+		searchLbl2 = new JLabel("Search:");
+		searchTf2 = new JTextField();
+		var2DataResponse = new JTextArea();
+		var2DataResponseScPane = new JScrollPane(var2DataResponse);
+
+		loginBtn2 = new JButton("Search");
+		loginBtn2.addActionListener(this);
+		loginBtn2.setActionCommand("search");
+
+		var2.add(descLbl2, "cell 0 0 5 1");
+		var2.add(secLbl2, "cell 0 1 5 1");
+		var2.add(secCheck2, "cell 0 1 5 1");
+		var2.add(userLbl2, "cell 0 2");
+		var2.add(userTf2, "cell 1 2,growx");
+		var2.add(passLbl2, "cell 2 2");
+		var2.add(passTf2, "cell 3 2,growx");
+		var2.add(searchLbl2, "cell 0 3");
+		var2.add(searchTf2, "cell 1 3 3 1,growx");
+		var2.add(loginBtn2, "cell 4 3, align right");
+		var2.add(var2DataResponseScPane, "cell 0 4 5 1,grow");
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("login")) {
+		if (e.getActionCommand().equals("login1")) {
 			var1service = new Var1Service();
 			ResultSet rs = null;
 			boolean nodata = true;
 
 			try {
-				rs = var1service.transferVar1Response(userTf.getText(),
-						passTf.getText(), secCheck.isSelected());
+				rs = var1service.transferVar1Response(userTf1.getText(),
+						passTf1.getText(), secCheck1.isSelected());
+			} catch (SQLException e2) {
+				JOptionPane.showConfirmDialog(null, e2.getMessage(), "Error",
+						JOptionPane.CLOSED_OPTION);
+			} catch (PasswordException e2) {
+				JOptionPane.showConfirmDialog(null, e2.getMessage(), "Error",
+						JOptionPane.CLOSED_OPTION);
+			}
+
+			try {
+				if (rs != null) {
+					while (rs.next()) {
+						nodata = false;
+						var1DataResponse.append(rs.getInt("id") + "|"
+								+ rs.getString("product") + "|"
+								+ rs.getString("location") + "|"
+								+ rs.getDouble("price") + "\n");
+					}
+					var1DataResponse.append("\n");
+
+					if (nodata)
+						JOptionPane.showConfirmDialog(null, "No data found",
+								"Info", JOptionPane.CLOSED_OPTION);
+				}
+			} catch (SQLException e1) {
+				JOptionPane.showConfirmDialog(null, e1.getMessage(), "Error",
+						JOptionPane.CLOSED_OPTION);
+			}
+		}
+		
+		else if (e.getActionCommand().equals("search")) {
+			var2service = new Var2Service();
+			ResultSet rs = null;
+			boolean nodata = true;
+
+			try {
+				rs = var1service.transferVar1Response(userTf1.getText(),
+						passTf1.getText(), secCheck1.isSelected());
 			} catch (SQLException e2) {
 				JOptionPane.showConfirmDialog(null, e2.getMessage(), "Error",
 						JOptionPane.CLOSED_OPTION);
