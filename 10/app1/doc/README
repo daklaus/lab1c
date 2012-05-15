@@ -32,8 +32,22 @@ Danach werden die gekennzeichneten Inputs (werden als "?" gekennzeichnet) befüll
 
 Variante 2:
 ===========
-//TODO
+Beschreibung:
+-------------
+Der User kann durch Eingabe von Usernamen, Passwort und einem Suchwort die Datenbank nach seinen Konto-Buchungen absuchen.
+--> Ist der Login-Versuch erfolgreich werden Daten entsprechend den Suchkriterien angezeigt
+--> Andernfalls wird eine Fehlermeldung ausgegeben
 
+Wie in Variante 1 kann der User auch diesmal wieder wählen, ob die Login-Variante sicher oder unsicher von statten gehen soll.
+--> Sicher: User, Passwort und Suchkriterium werden über prepared statements an die Datenbank gesendet.
+--> Unsicher: Anstatt eines prepared statements wird ein "normales" (unsicheres) statement für das Suchkriterium verwendet. User und Passwort verwenden jedoch prepared statements.
+
+Implementierte Fehler:
+----------------------
+Anders als in Variante 1 ist es diesmal möglich, ganze SQL-Statements zu "injecten". So kann über die Sucheingabe beispielsweise folgendes Statement "injectet" werden:
+"' or 1=1 union select * from account --", was bewirkt, dass alle User und Passwörter angezeigt werden.
+
+Dieser Fehler kann beispielsweise wieder über prepared statements oder Wildcards gelöst werden.
 
 Variante 3:
 ===========
