@@ -1,0 +1,75 @@
+====================
+app1 - SQL-Injection
+====================
+
+Bei Schwachstelle 1 hat sich unsere Gruppe für "SQL-Injection" entschieden, welche wir durch 3 Varianten in einer JAVA-Applikation abhandeln werden.
+Im Folgenden werden alle 3 Varianten näher beschrieben.
+
+Variante 1:
+===========
+Beschreibung:
+-------------
+Der User wird zu einem Login aufgefordert.
+--> Ist der Login-Versuch erfolgreich, so werden dem User verschiedenste Daten angezeigt.
+--> Andernfalls wird eine Fehlermeldung ausgegeben.
+
+Der User kann über eine Checkbox wählen ob der Login-Modus "sicher" oder "unsicher" ausgeführt werden soll.
+--> Sicher: Die beiden Input-Felder (user, password) werden über prepared statements an die Datenbank gesendet.
+--> Unsicher: Anstatt eines prepared statements wird ein "normales" (unsicheres) statement verwendet.
+
+Implementierte Fehler:
+----------------------
+Wenn der "unsichere" Weg beschritten wird, ist es durch Eingabe von beispielsweise "' or 1=1 --" möglich,
+den Authentifizierungsprozess komplett zu umgehen (user und password müssen somit nicht bekannt sein!).
+Dies geschieht aufgrund des Aufbaues des zugrunde liegenden SQL statements ("select * from account where user = 'user' and password = 'password'").
+Durch die Eingabe der oben angeführten Zeichen wird das ganze SQL statement um eine logische or Verknüpfung erweitert, was Authentifizierung somit zu nichte macht (die Zeichenfolge -- schneidet alle nachfolgenden Zeichen im Befehl ab).
+
+Dieser Fehler kann jedoch durch die Verwendung so genannter "prepared statements" oder über Filterung der Eingabeparameter umgangen werden.
+Der Unterschied zwischen prepared und "normalen" statements ist, dass bei prepared statements die SQL Abfragen vorkompiliert werden und somit die logische Datenabfrage schon feststeht.
+Danach werden die gekennzeichneten Inputs (werden als "?" gekennzeichnet) befüllt.
+"Normale" statements werden nicht vorkompiliert und sind somit als "as is" zu betrachten --> SQL-Injection möglich!
+
+
+Variante 2:
+===========
+Beschreibung:
+-------------
+Der User kann durch Eingabe von Usernamen, Passwort und einem Suchwort die Datenbank nach seinen Konto-Buchungen absuchen.
+--> Ist der Login-Versuch erfolgreich werden Daten entsprechend den Suchkriterien angezeigt
+--> Andernfalls wird eine Fehlermeldung ausgegeben
+
+Wie in Variante 1 kann der User auch diesmal wieder wählen, ob die Login-Variante sicher oder unsicher von statten gehen soll.
+--> Sicher: User, Passwort und Suchkriterium werden über prepared statements an die Datenbank gesendet.
+--> Unsicher: Anstatt eines prepared statements wird ein "normales" (unsicheres) statement für das Suchkriterium verwendet. User und Passwort verwenden jedoch prepared statements.
+
+Implementierte Fehler:
+----------------------
+Anders als in Variante 1 ist es diesmal möglich, ganze SQL-Statements zu "injecten". So kann über die Sucheingabe beispielsweise folgendes Statement "injectet" werden:
+"' or 1=1 union select * from account --", was bewirkt, dass alle User und Passwörter angezeigt werden.
+
+Dieser Fehler kann beispielsweise wieder über prepared statements oder Wildcards gelöst werden.
+
+Variante 3:
+===========
+//TODO
+
+', 'asddfg', 'asdfasdf'); drop table var3data; --
+
+
+Erforderliche Software:
+=======================
+--> aktuelles Java JDK (ab Version 6)
+--> ant
+--> Anzeigesystem für grafische Objekte (wegen Verwendung von Fenstern in der Applikation)
+
+
+Installation:
+=============
+1) Kompilierung (siehe unter "Kompilierung")
+2) Start --> "ant run"
+
+
+Kompilierung:
+=============
+Kompilierung --> "ant build"
+Kompilierung und .jar file Erstellung --> "ant deploy"
