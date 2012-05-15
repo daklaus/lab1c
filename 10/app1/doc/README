@@ -21,12 +21,13 @@ Implementierte Fehler:
 ----------------------
 Wenn der "unsichere" Weg beschritten wird, ist es durch Eingabe von beispielsweise "' or 1=1 --" möglich,
 den Authentifizierungsprozess komplett zu umgehen (user und password müssen somit nicht bekannt sein!).
-Dies geschieht aufgrund des Aufbaues des zugrunde liegenden SQL statements (select * from account where user = 'user' and password = 'pass').
-Durch die Eingabe der oben angeführten Zeichen wird das ganze SQL statement um eine logische or Verknüpfung erweitert, was Authentifizierung somit zu nichte macht.
+Dies geschieht aufgrund des Aufbaues des zugrunde liegenden SQL statements ("select * from account where user = 'user' and password = 'password'").
+Durch die Eingabe der oben angeführten Zeichen wird das ganze SQL statement um eine logische or Verknüpfung erweitert, was Authentifizierung somit zu nichte macht (die Zeichenfolge -- schneidet alle nachfolgenden Zeichen im Befehl ab).
 
-Dieser Fehler kann jedoch durch die Verwendung so genannter prepared statements oder über Filterung der Eingabeparameter umgangen werden.
-Der Unterschied zwischem prepared und "normalen" statements ist jener, dass bei prepared statements die SQL Abfragen vorkompiliert werden und somit die logische Datenabfrage schon feststeht.
+Dieser Fehler kann jedoch durch die Verwendung so genannter "prepared statements" oder über Filterung der Eingabeparameter umgangen werden.
+Der Unterschied zwischen prepared und "normalen" statements ist, dass bei prepared statements die SQL Abfragen vorkompiliert werden und somit die logische Datenabfrage schon feststeht.
 Danach werden die gekennzeichneten Inputs (werden als "?" gekennzeichnet) befüllt.
+"Normale" statements werden nicht vorkompiliert und sind somit als "as is" zu betrachten --> SQL-Injection möglich!
 
 
 Variante 2:
@@ -48,10 +49,11 @@ Erforderliche Software:
 
 Installation:
 =============
---> Komlilierung über ant
---> Start: "ant run"
+1) Kompilierung (siehe unter "Kompilierung")
+2) Start --> "ant run"
 
 
 Kompilierung:
 =============
---> "ant debug"
+Kompilierung --> "ant build"
+Kompilierung und .jar file Erstellung --> "ant deploy"
