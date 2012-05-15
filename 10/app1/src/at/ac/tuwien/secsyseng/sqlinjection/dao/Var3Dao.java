@@ -15,10 +15,13 @@ public class Var3Dao {
 
 		Connection c = ConnectionFactory.getConnection();
 		PreparedStatement pstmt = c
-				.prepareStatement("insert into var3data values (?, ?);");
+				.prepareStatement("insert into var3data values (?, ?, ?, ?);");
 
 		pstmt.setInt(1, id);
 		pstmt.setString(2, name);
+		pstmt.setString(3, "Trash");
+		pstmt.setString(3, "Trash");
+
 
 		return pstmt.executeUpdate();
 
@@ -29,7 +32,7 @@ public class Var3Dao {
 		Connection c = ConnectionFactory.getConnection();
 		Statement st = c.createStatement();
 		return st.executeUpdate("insert into var3data values (" + id + ", '"
-				+ name + "' );");
+				+ name + "', 'Trash', 'Trash' );");
 
 	}
 
