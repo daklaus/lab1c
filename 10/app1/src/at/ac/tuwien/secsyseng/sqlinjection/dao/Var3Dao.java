@@ -22,7 +22,7 @@ public class Var3Dao {
 		pstmt.setInt(1, id);
 		pstmt.setString(2, name);
 		pstmt.setString(3, "Trash");
-		pstmt.setString(3, "Trash");
+		pstmt.setString(4, "Trash");
 
 
 		return pstmt.executeUpdate();

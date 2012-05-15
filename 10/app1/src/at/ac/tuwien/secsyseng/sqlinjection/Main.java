@@ -119,11 +119,11 @@ public class Main {
 		st.executeUpdate("insert into var1data values (3, 'Fiat Stilo', 'Austria', 7000);");
 
 		// Inserts into var3data
-		st.executeUpdate("insert into var3data values (1, 'Gruppe 1', 'Trash', 'Trash');");
-		st.executeUpdate("insert into var3data values (2, 'Gruppe 2', 'Trash', 'Trash');");
-		st.executeUpdate("insert into var3data values (3, 'Gruppe 3', 'Trash', 'Trash');");
-		st.executeUpdate("insert into var3data values (4, 'Gruppe 4', 'Trash', 'Trash');");
-		st.executeUpdate("insert into var3data values (5, 'Gruppe 5', 'Trash', 'Trash');");
+		st.executeUpdate("insert into var3data values (1, 'Toxic Dragon', 'Trash', 'Trash');");
+		st.executeUpdate("insert into var3data values (2, 'Toxic Sorcerer', 'Trash', 'Trash');");
+		st.executeUpdate("insert into var3data values (3, 'Cypher Nexxus', 'Trash', 'Trash');");
+		st.executeUpdate("insert into var3data values (4, 'Common Paradox', 'Trash', 'Trash');");
+		st.executeUpdate("insert into var3data values (5, 'Trace Atom', 'Trash', 'Trash');");
 		// st.executeUpdate("insert into var3data values (6, 'Gruppe 6'); drop table var3data;");
 
 		// Insert into var2data

@@ -194,7 +194,7 @@ public class MainFrame implements ActionListener {
 		var3DataResponse = new JTextArea();
 		var3DataResponseScPane = new JScrollPane(var3DataResponse);
 		try {
-			
+
 			ResultSet rs = var3service.getvar3Data();
 			boolean nodata = true;
 			if (rs != null) {
@@ -289,7 +289,7 @@ public class MainFrame implements ActionListener {
 			try {
 				if (rs != null) {
 					while (rs.next()) {
-						nodata = false;						
+						nodata = false;
 						var2DataResponse.append(rs.getString(1) + "|"
 								+ rs.getString(2) + "|" + rs.getString(3) + "|"
 								+ rs.getString(4) + "\n");
@@ -310,34 +310,38 @@ public class MainFrame implements ActionListener {
 			int update;
 			ResultSet rs = null;
 			boolean nodata = true;
+			if (groupidTf3.getText().isEmpty()) {
 
-			try {
-				update = var3service.transferVar3Response(
-						Integer.parseInt(groupidTf3.getText()),
-						groupnameTf3.getText(), secCheck3.isSelected());
-			} catch (SQLException e2) {
-				JOptionPane.showConfirmDialog(null, e2.getMessage(), "Error",
-						JOptionPane.CLOSED_OPTION);
-			}
-
-			try {
-				rs = var3service.getvar3Data();
-
-				if (rs != null) {
-					while (rs.next()) {
-						nodata = false;
-						var3DataResponse.append(rs.getInt("id") + "|"
-								+ rs.getString("name") + "\n");
-					}
-					var3DataResponse.append("\n");
-
-					if (nodata)
-						JOptionPane.showConfirmDialog(null, "No data found",
-								"Info", JOptionPane.CLOSED_OPTION);
+			} else {
+				try {
+					update = var3service.transferVar3Response(
+							Integer.parseInt(groupidTf3.getText()),
+							groupnameTf3.getText(), secCheck3.isSelected());
+				} catch (SQLException e2) {
+					JOptionPane.showConfirmDialog(null, e2.getMessage(),
+							"Error", JOptionPane.CLOSED_OPTION);
 				}
-			} catch (SQLException e1) {
-				JOptionPane.showConfirmDialog(null, e1.getMessage(), "Error",
-						JOptionPane.CLOSED_OPTION);
+
+				try {
+					rs = var3service.getvar3Data();
+
+					if (rs != null) {
+						while (rs.next()) {
+							nodata = false;
+							var3DataResponse.append(rs.getInt("id") + "|"
+									+ rs.getString("name") + "\n");
+						}
+						var3DataResponse.append("\n");
+
+						if (nodata)
+							JOptionPane.showConfirmDialog(null,
+									"No data found", "Info",
+									JOptionPane.CLOSED_OPTION);
+					}
+				} catch (SQLException e1) {
+					JOptionPane.showConfirmDialog(null, e1.getMessage(),
+							"Error", JOptionPane.CLOSED_OPTION);
+				}
 			}
 		}
 	}
