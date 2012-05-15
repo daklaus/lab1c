@@ -185,11 +185,7 @@ public class MainFrame implements ActionListener {
 			try {
 				if (rs != null) {
 					while (rs.next()) {
-						nodata = false;
-						
-						ResultSetMetaData rsMetaData = rs.getMetaData();
-						//System.out.println(rsMetaData.getColumnCount());
-						
+						nodata = false;						
 						var1DataResponse.append(rs.getInt("id") + "|"
 								+ rs.getString("product") + "|"
 								+ rs.getString("location") + "|"
@@ -227,7 +223,7 @@ public class MainFrame implements ActionListener {
 			try {
 				if (rs != null) {
 					while (rs.next()) {
-						nodata = false;
+						nodata = false;						
 						var2DataResponse.append(rs.getString(1) + "|"
 								+ rs.getString(2) + "|"
 								+ rs.getString(3) + "|"

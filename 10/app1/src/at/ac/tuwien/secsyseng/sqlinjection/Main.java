@@ -61,9 +61,8 @@ public class Main {
 		System.out.println("=============");
 		rs = st.executeQuery("select * from var2data;");
 		while (rs.next()) {
-			System.out.println(rs.getInt("id") + "|" + rs.getInt("aid")
-					+ "|" + rs.getString("vz") + "|"
-					+ rs.getDouble("amount"));
+			System.out.println(rs.getInt("id") + "|" + rs.getInt("aid") + "|"
+					+ rs.getString("vz") + "|" + rs.getDouble("amount"));
 		}
 	}
 
