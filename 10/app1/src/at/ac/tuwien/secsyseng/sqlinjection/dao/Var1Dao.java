@@ -55,7 +55,7 @@ public class Var1Dao {
 		ResultSet rs = st.executeQuery("select * from account where user = '"
 				+ user + "' and password = '" + password + "';");
 		password = null;
-
+		
 		if (rs.next()) {
 			st = c.createStatement();
 			rs = st.executeQuery("select * from var1data;");
