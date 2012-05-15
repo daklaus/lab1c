@@ -47,7 +47,7 @@ public class Main {
 		System.out.println("=============");
 		System.out.println("var1data test");
 		System.out.println("=============");
-		rs = st.executeQuery("select * from var2data;");
+		rs = st.executeQuery("select * from var1data;");
 		while (rs.next()) {
 			System.out.println(rs.getInt("id") + "|" + rs.getString("product") + "|"
 					+ rs.getString("location") + "|" + rs.getDouble("price"));

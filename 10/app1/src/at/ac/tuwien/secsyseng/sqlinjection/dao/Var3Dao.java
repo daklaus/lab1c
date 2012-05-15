@@ -6,8 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import at.ac.tuwien.secsyseng.sqlinjection.exception.PasswordException;
-
 public class Var3Dao {
 
 	public Var3Dao() {

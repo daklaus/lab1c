@@ -4,7 +4,6 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
@@ -65,7 +64,6 @@ public class MainFrame implements ActionListener {
 	// var3
 	private JLabel descLbl3;
 	private JLabel secLbl3;
-
 	private JButton loginBtn3;
 	private JTextArea var3DataResponse;
 	private JScrollPane var3DataResponseScPane;
@@ -108,7 +106,7 @@ public class MainFrame implements ActionListener {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("app1 - SQL-Injection");
-		frame.setBounds(100, 100, 500, 350);
+		frame.setBounds(100, 100, 600, 450);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JTabbedPane app1Pane = new JTabbedPane();
