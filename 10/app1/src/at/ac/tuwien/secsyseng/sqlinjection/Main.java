@@ -47,7 +47,7 @@ public class Main {
 		System.out.println("=============");
 		System.out.println("var1data test");
 		System.out.println("=============");
-		rs = st.executeQuery("select * from var2data;");
+		rs = st.executeQuery("select * from var1data;");
 		while (rs.next()) {
 			System.out.println(rs.getInt("id") + "|" + rs.getString("product") + "|"
 					+ rs.getString("location") + "|" + rs.getDouble("price"));
@@ -95,7 +95,9 @@ public class Main {
 
 		// Create table var3data
 		st.executeUpdate("create table var3data (" + "id integer primary key,"
-				+ "name varchar(255) not null );");
+				+ "name varchar(255) not null," 
+				+ "c3 varchar(255) not null,"
+				+ "c4 varchar(255) not null);");
 
 		// Create table var2data
 		st.executeUpdate("create table var2data (" + "id integer primary key,"
@@ -117,11 +119,11 @@ public class Main {
 		st.executeUpdate("insert into var1data values (3, 'Fiat Stilo', 'Austria', 7000);");
 
 		// Inserts into var3data
-		st.executeUpdate("insert into var3data values (1, 'Gruppe 1');");
-		st.executeUpdate("insert into var3data values (2, 'Gruppe 2');");
-		st.executeUpdate("insert into var3data values (3, 'Gruppe 3');");
-		st.executeUpdate("insert into var3data values (4, 'Gruppe 4');");
-		st.executeUpdate("insert into var3data values (5, 'Gruppe 5');");
+		st.executeUpdate("insert into var3data values (1, 'Gruppe 1', 'Trash', 'Trash');");
+		st.executeUpdate("insert into var3data values (2, 'Gruppe 2', 'Trash', 'Trash');");
+		st.executeUpdate("insert into var3data values (3, 'Gruppe 3', 'Trash', 'Trash');");
+		st.executeUpdate("insert into var3data values (4, 'Gruppe 4', 'Trash', 'Trash');");
+		st.executeUpdate("insert into var3data values (5, 'Gruppe 5', 'Trash', 'Trash');");
 		// st.executeUpdate("insert into var3data values (6, 'Gruppe 6'); drop table var3data;");
 
 		// Insert into var2data
