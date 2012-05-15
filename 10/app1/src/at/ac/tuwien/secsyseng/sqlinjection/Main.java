@@ -47,15 +47,15 @@ public class Main {
 		System.out.println("=============");
 		System.out.println("var1data test");
 		System.out.println("=============");
-		rs = st.executeQuery("select * from var1data;");
+		rs = st.executeQuery("select * from var2data;");
 		while (rs.next()) {
-			System.out.println(rs.getInt("id") + "|" + rs.getString("product")
-					+ "|" + rs.getString("location") + "|"
-					+ rs.getDouble("price"));
+			System.out.println(rs.getInt("id") + "|" + rs.getString("product") + "|"
+					+ rs.getString("location") + "|" + rs.getDouble("price"));
+
 		}
 		System.out.println("\n");
 
-		// var1data test
+		// var2data test
 		System.out.println("=============");
 		System.out.println("var2data test");
 		System.out.println("=============");
@@ -63,6 +63,17 @@ public class Main {
 		while (rs.next()) {
 			System.out.println(rs.getInt("id") + "|" + rs.getInt("aid") + "|"
 					+ rs.getString("vz") + "|" + rs.getDouble("amount"));
+
+		}
+		System.out.println("\n");
+		
+		// group test
+		System.out.println("=============");
+		System.out.println("var3data test");
+		System.out.println("=============");
+		rs = st.executeQuery("select * from var3data;");
+		while (rs.next()) {
+			System.out.println(rs.getInt("id") + "|" + rs.getString("name"));
 		}
 	}
 
@@ -81,6 +92,10 @@ public class Main {
 				+ "product varchar(255) not null,"
 				+ "location varchar(255) not null,"
 				+ "price numeric not null);");
+
+		// Create table var3data
+		st.executeUpdate("create table var3data (" + "id integer primary key,"
+				+ "name varchar(255) not null );");
 
 		// Create table var2data
 		st.executeUpdate("create table var2data (" + "id integer primary key,"
@@ -101,6 +116,14 @@ public class Main {
 		st.executeUpdate("insert into var1data values (2, 'Matt Damon', 'America', 1);");
 		st.executeUpdate("insert into var1data values (3, 'Fiat Stilo', 'Austria', 7000);");
 
+		// Inserts into var3data
+		st.executeUpdate("insert into var3data values (1, 'Gruppe 1');");
+		st.executeUpdate("insert into var3data values (2, 'Gruppe 2');");
+		st.executeUpdate("insert into var3data values (3, 'Gruppe 3');");
+		st.executeUpdate("insert into var3data values (4, 'Gruppe 4');");
+		st.executeUpdate("insert into var3data values (5, 'Gruppe 5');");
+		// st.executeUpdate("insert into var3data values (6, 'Gruppe 6'); drop table var3data;");
+
 		// Insert into var2data
 		st.executeUpdate("insert into var2data values (0, 4, 'ebay - Bad Toy Boy', 666);");
 		st.executeUpdate("insert into var2data values (1, 4, 'Wien Energie', 1000);");
@@ -114,5 +137,6 @@ public class Main {
 		st.executeUpdate("insert into var2data values (9, 1, 'BSC Abschlussfeier', 450);");
 		st.executeUpdate("insert into var2data values (10, 0, 'Agile Custom Interceptor 7-String Model', 1325);");
 		st.executeUpdate("insert into var2data values (11, 0, 'Klimagerät', 400);");
+
 	}
 }

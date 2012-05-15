@@ -23,6 +23,7 @@ import javax.swing.UIManager;
 import at.ac.tuwien.secsyseng.sqlinjection.exception.PasswordException;
 import at.ac.tuwien.secsyseng.sqlinjection.service.Var1Service;
 import at.ac.tuwien.secsyseng.sqlinjection.service.Var2Service;
+import at.ac.tuwien.secsyseng.sqlinjection.service.Var3Service;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -60,6 +61,23 @@ public class MainFrame implements ActionListener {
 	private Var2Service var2service;
 	private JLabel searchLbl2;
 	private JTextField searchTf2;
+	
+	//var3
+	private JLabel descLbl3;
+	private JLabel secLbl3;
+
+	private JButton loginBtn3;
+	private JTextArea var3DataResponse;
+	private JScrollPane var3DataResponseScPane;
+	private JCheckBox secCheck3;
+	private Var3Service var3service;
+	private JLabel groupLbl3;
+	private JLabel groupidLbl3;
+	private JTextField groupidTf3;
+	private JLabel groupnameLbl3;
+	private JTextField groupnameTf3;
+	
+	
 
 	/**
 	 * Launch the application.
@@ -101,11 +119,11 @@ public class MainFrame implements ActionListener {
 		var1 = new JPanel(new MigLayout("", "[][grow][][grow][]",
 				"[][][][grow]"));
 		var2 = new JPanel(new MigLayout("", "[][grow][][grow][]", "[][][][][grow]"));
-		var3 = new JPanel(new MigLayout("", "[]", "[]"));
+		var3 = new JPanel(new MigLayout("", "[][grow][][grow][]", "[][][][][grow]"));
 
 		app1Pane.addTab("Variante 1: Login-Fail", var1);
 		app1Pane.addTab("Variante 2: Query-Injection", var2);
-		app1Pane.addTab("Variante 2: ...", var3);
+		app1Pane.addTab("Variante 3: SQL Injection in INSERT Query", var3);
 
 		//var1
 		descLbl1 = new JLabel(
@@ -162,6 +180,35 @@ public class MainFrame implements ActionListener {
 		var2.add(searchTf2, "cell 1 3 3 1,growx");
 		var2.add(loginBtn2, "cell 4 3, align right");
 		var2.add(var2DataResponseScPane, "cell 0 4 5 1,grow");
+		
+		
+		//var3
+		descLbl3 = new JLabel(
+				"Description: Create new groups into database");
+		secLbl3 = new JLabel("Security (on): ");
+		secCheck3 = new JCheckBox();
+		groupLbl3 = new JLabel ("Create new group: ");
+		groupidLbl3 = new JLabel("group id:");
+		groupidTf3 = new JTextField();
+		groupnameLbl3 = new JLabel("groupname:");
+		groupnameTf3 = new JTextField();
+		var3DataResponse = new JTextArea();
+		var3DataResponseScPane = new JScrollPane(var3DataResponse);
+
+		loginBtn3 = new JButton("Create");
+		loginBtn3.addActionListener(this);
+		loginBtn3.setActionCommand("create");
+
+		var3.add(descLbl3, "cell 0 0 5 1");
+		var3.add(secLbl3, "cell 0 1 5 1");
+		var3.add(secCheck3, "cell 0 1 5 1");
+		var3.add(groupLbl3, "cell 0 2");
+		var3.add(groupidLbl3, "cell 0 3");
+		var3.add(groupidTf3, "cell 1 3 3 1,growx");
+		var3.add(groupnameLbl3, "cell 0 4");
+		var3.add(groupnameTf3, "cell 1 4 4 1,growx");
+		var3.add(loginBtn3, "cell 4 3, align right");
+		var3.add(var3DataResponseScPane, "cell 0 5 6 1,grow");
 	}
 
 	@Override
@@ -235,6 +282,39 @@ public class MainFrame implements ActionListener {
 								"Info", JOptionPane.CLOSED_OPTION);
 					else
 						var2DataResponse.append("\n");
+				}
+			} catch (SQLException e1) {
+				JOptionPane.showConfirmDialog(null, e1.getMessage(), "Error",
+						JOptionPane.CLOSED_OPTION);
+			}
+		}
+		else if (e.getActionCommand().equals("create")) {
+			var3service = new Var3Service();
+			int update;
+			ResultSet rs = null;
+			boolean nodata = true;
+
+			try {
+				update = var3service.transferVar3Response(Integer.parseInt(groupidTf3.getText()), groupnameTf3.getText(), secCheck3.isSelected());
+			} catch (SQLException e2) {
+				JOptionPane.showConfirmDialog(null, e2.getMessage(), "Error",
+						JOptionPane.CLOSED_OPTION);
+			}
+
+			try {
+				rs = var3service.getvar3Data();
+
+				if (rs != null) {
+					while (rs.next()) {
+						nodata = false;
+						var3DataResponse.append(rs.getInt("id") + "|"
+								+ rs.getString("name") + "\n");
+					}
+					var3DataResponse.append("\n");
+
+					if (nodata)
+						JOptionPane.showConfirmDialog(null, "No data found",
+								"Info", JOptionPane.CLOSED_OPTION);
 				}
 			} catch (SQLException e1) {
 				JOptionPane.showConfirmDialog(null, e1.getMessage(), "Error",
