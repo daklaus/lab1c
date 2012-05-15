@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
@@ -138,7 +139,7 @@ public class MainFrame implements ActionListener {
 
 		loginBtn1 = new JButton("Login");
 		loginBtn1.addActionListener(this);
-		loginBtn1.setActionCommand("login2");
+		loginBtn1.setActionCommand("login");
 
 		var1.add(descLbl1, "cell 0 0 5 1");
 		var1.add(secLbl1, "cell 0 1 5 1");
@@ -212,7 +213,7 @@ public class MainFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (e.getActionCommand().equals("login1")) {
+		if (e.getActionCommand().equals("login")) {
 			var1service = new Var1Service();
 			ResultSet rs = null;
 			boolean nodata = true;
@@ -232,16 +233,21 @@ public class MainFrame implements ActionListener {
 				if (rs != null) {
 					while (rs.next()) {
 						nodata = false;
+						
+						ResultSetMetaData rsMetaData = rs.getMetaData();
+						//System.out.println(rsMetaData.getColumnCount());
+						
 						var1DataResponse.append(rs.getInt("id") + "|"
 								+ rs.getString("product") + "|"
 								+ rs.getString("location") + "|"
 								+ rs.getDouble("price") + "\n");
 					}
-					var1DataResponse.append("\n");
 
 					if (nodata)
 						JOptionPane.showConfirmDialog(null, "No data found",
 								"Info", JOptionPane.CLOSED_OPTION);
+					else
+						var2DataResponse.append("\n");
 				}
 			} catch (SQLException e1) {
 				JOptionPane.showConfirmDialog(null, e1.getMessage(), "Error",
@@ -255,8 +261,8 @@ public class MainFrame implements ActionListener {
 			boolean nodata = true;
 
 			try {
-				rs = var1service.transferVar1Response(userTf1.getText(),
-						passTf1.getText(), secCheck1.isSelected());
+				rs = var2service.transferVar2Response(userTf2.getText(),
+						passTf2.getText(), searchTf2.getText(), secCheck2.isSelected());
 			} catch (SQLException e2) {
 				JOptionPane.showConfirmDialog(null, e2.getMessage(), "Error",
 						JOptionPane.CLOSED_OPTION);
@@ -269,16 +275,17 @@ public class MainFrame implements ActionListener {
 				if (rs != null) {
 					while (rs.next()) {
 						nodata = false;
-						var1DataResponse.append(rs.getInt("id") + "|"
-								+ rs.getString("product") + "|"
-								+ rs.getString("location") + "|"
-								+ rs.getDouble("price") + "\n");
+						var2DataResponse.append(rs.getString(1) + "|"
+								+ rs.getString(2) + "|"
+								+ rs.getString(3) + "|"
+								+ rs.getString(4) + "\n");
 					}
-					var1DataResponse.append("\n");
 
 					if (nodata)
 						JOptionPane.showConfirmDialog(null, "No data found",
 								"Info", JOptionPane.CLOSED_OPTION);
+					else
+						var2DataResponse.append("\n");
 				}
 			} catch (SQLException e1) {
 				JOptionPane.showConfirmDialog(null, e1.getMessage(), "Error",

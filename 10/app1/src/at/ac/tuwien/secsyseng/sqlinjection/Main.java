@@ -43,17 +43,21 @@ public class Main {
 		}
 		System.out.println("\n");
 
-		// account test
-		System.out.println("=============");
-		System.out.println("var1data test");
-		System.out.println("=============");
-		rs = st.executeQuery("select * from var1data;");
-		while (rs.next()) {
-			System.out.println(rs.getInt("id") + "|" + rs.getString("product")
-					+ "|" + rs.getString("location") + "|"
-					+ rs.getDouble("price"));
-		}
+		
 
+		// var1data test
+		System.out.println("=============");
+		System.out.println("var2data test");
+		System.out.println("=============");
+		rs = st.executeQuery("select * from var2data;");
+		while (rs.next()) {
+			System.out.println(rs.getInt("id") + "|" + rs.getInt("aid")
+					+ "|" + rs.getString("vz") + "|"
+					+ rs.getDouble("amount"));
+
+		}
+		
+		System.out.println("\n");
 		// group test
 		System.out.println("=============");
 		System.out.println("var3data test");
@@ -83,9 +87,17 @@ public class Main {
 				+ "location varchar(255) not null,"
 				+ "price numeric not null);");
 
+
 		// Create table var3data
 		st.executeUpdate("create table var3data (" + "id integer primary key,"
 				+ "name varchar(255) not null );");
+
+		// Create table var2data
+		st.executeUpdate("create table var2data (" + "id integer primary key,"
+				+ "aid integer," + "vz varchar(255) not null,"
+				+ "amount numeric not null,"
+				+ "foreign key(aid) references account(id));");
+
 
 		// Insert into account
 		st.executeUpdate("insert into account values (0, 'christian', 'pass1', 10000);");
@@ -100,6 +112,7 @@ public class Main {
 		st.executeUpdate("insert into var1data values (2, 'Matt Damon', 'America', 1);");
 		st.executeUpdate("insert into var1data values (3, 'Fiat Stilo', 'Austria', 7000);");
 
+
 		// Inserts into var3data
 		st.executeUpdate("insert into var3data values (1, 'Gruppe 1');");
 		st.executeUpdate("insert into var3data values (2, 'Gruppe 2');");
@@ -107,6 +120,21 @@ public class Main {
 		st.executeUpdate("insert into var3data values (4, 'Gruppe 4');");
 		st.executeUpdate("insert into var3data values (5, 'Gruppe 5');");
 		// st.executeUpdate("insert into var3data values (6, 'Gruppe 6'); drop table var3data;");
+
+
+		// Insert into var2data
+		st.executeUpdate("insert into var2data values (0, 4, 'ebay - Bad Toy Boy', 666);");
+		st.executeUpdate("insert into var2data values (1, 4, 'Wien Energie', 1000);");
+		st.executeUpdate("insert into var2data values (2, 4, 'Studiengebühren für TU Wien', 10000);");
+		st.executeUpdate("insert into var2data values (3, 4, 'Hacking activity', 666);");
+		st.executeUpdate("insert into var2data values (4, 3, 'Guitar amp', 800);");
+		st.executeUpdate("insert into var2data values (5, 3, 'Novarock', 140);");
+		st.executeUpdate("insert into var2data values (6, 2, 'Panasonic TX-P42GT50E', 1099);");
+		st.executeUpdate("insert into var2data values (7, 2, 'Panasonic TX-P50VT50E', 2087);");
+		st.executeUpdate("insert into var2data values (8, 1, 'Bier Einkauf', 50);");
+		st.executeUpdate("insert into var2data values (9, 1, 'BSC Abschlussfeier', 450);");
+		st.executeUpdate("insert into var2data values (10, 0, 'Agile Custom Interceptor 7-String Model', 1325);");
+		st.executeUpdate("insert into var2data values (11, 0, 'Klimagerät', 400);");
 
 	}
 }
