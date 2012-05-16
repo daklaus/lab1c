@@ -14,19 +14,23 @@ Abstract:
   The examples are local bufferoverflows that can be exploited by a unprivileged user,
   to gain root access through a vulnerable suid programm (vuln1.c, vuln2.c).
   The secure versions which limit the number of characters that can be
-  stored in the buffer (by using "strncpy") can be found in sec1.c and sec2.c.
+  stored in the buffer can be found in sec1.c and sec2.c.
+  In this case "strlcpy" was not used for the secure version of the program,
+  because it is not a std. glibc function. Instead "strncpy" was used together with a
+  limiting '\0' byte which would automatically be appended after the last character by "strlcpy". In a more beautiful 
+  example the hole buffer[] could be initialized with '\0' bytes before. 
 
 Requirements
 =============
-* 32bit system
-* Kernel ohne non-executable stack (NX bit)
-  bzw. execstack nachtraeglich aktiviert entweder mit "execstack"
+* 32 Bit System
+* Kernel OHNE non-executable stack (NX bit) support
+  bzw. execstack nachtraeglich aktivieren. Entweder mit "execstack"
   oder durch gcc option "-z execstack"
-* Abschalten von ASLR (address space layout randomization)
+* Abschalten von ASLR (Address Space Layout Randomization)
   $ echo 0 > /proc/sys/kernel/randomize_va_space
 * Kompiliert ohne stack cookies aka. stack protection (und eventuell mit debugging infos)	
   $ gcc vuln.c -o vuln -ggdb -fno-stack-protector -z execstack
-* suid bit fuer die vulnerable application
+* suid bit fuer die anfaelligen programme vuln1 und vuln2
   $ chown root.users program
   $ chmod +s program
 
