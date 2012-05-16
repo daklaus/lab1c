@@ -51,9 +51,23 @@ Dieser Fehler kann beispielsweise wieder über prepared statements oder Wildcards
 
 Variante 3:
 ===========
-//TODO
+Beschreibung: 
+In Variante 3 wird dem Benutzer in Anlehnung auf die Übung ermöglicht sich Gruppen anzulegen. Als Eingaben sind vom Benutzer Gruppennummer und ein Gruppenname erforderlich. Um eine Überprüfung 
+gewährleisten zu können, werden dem Benutzer alle aktuell angelegten Gruppen und dessen Gruppennummern angezeigt. 
 
-', 'asddfg', 'asdfasdf'); drop table var3data; --
+Wie auch die vorhergehenden Varianten gibt es hier wieder eine sichere Methode und eine Sicherheitslücke. Mit einer Checkbox kann dies zur Laufzeit verändert werden, welche Methode genutzt wird.
+--> Methode Sicher: alle Eingaben werden über prepared statements an die Datenbank übermittelt
+--> Sicherheitslücke: Wie auch in den anderen Varianten auch schon wurden normale (unsichere) statement zur Übermittlung verwenden. Bei diesen Abfragen wird das "escapen" nicht verhindert und 
+somit SQL Injections ermöglicht.
+
+Implementierte Fehler:
+----------------------
+In dieser Variante werden keine Daten aus der Datenbank ausgelesen, sondern Daten in die Datenbank geschrieben. 
+Wenn wir nun zB folgenden String in das Eingabefeld des Gruppennamen ', 'asddfg', 'asdfasdf'); drop table var3data; -- einfügen, wird die sämtliche Tabelle gelöscht.
+
+
+Diese Sicherheitslücke kann beispielsweise mittels prepared statements oder auch RegExp/Wildcards verhindert werden
+
 
 
 Erforderliche Software:
