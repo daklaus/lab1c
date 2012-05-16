@@ -10,11 +10,11 @@ Schwachstelle 2:
 Abstract:
 =========
   vuln1.c and vuln2.c are two classical stack based bufferoverflow examples. 
-  These code-snippets and exploits are largely inspired by [1]
-  The examples are local bufferoverflows that can be exploited by a unprivileges user,
+  These code-snippets and exploits are largely inspired by [1].
+  The examples are local bufferoverflows that can be exploited by a unprivileged user,
   to gain root access through a vulnerable suid programm (vuln1.c, vuln2.c)
 
-Requirements:
+Requirements
 =============
 * 32bit system
 * Kernel ohne non-executable stack (NX bit)
@@ -31,12 +31,43 @@ Requirements:
 Testsystem:
 =============
 * Tested on DVL (Damn Vulnerable Linux) Infectious Disease
-  "Linux bt 2.6.20-BT-PwnSauce-NOSMP #3"
+  "Linux bt 2.6.20-BT-PwnSauce-NOSMP #3 Sat Feb 24 15:52:59 GMT 2007 i686 athlon-4 i386 GNU/Linux"
+-----
 * $ gcc -v
 Reading specs from /usr/lib/gcc/i486-slackware-linux/3.4.6/specs
 Configured with: ../gcc-3.4.6/configure --prefix=/usr --enable-shared --enable-threads=posix --enable-__cxa_atexit --disable-checking --with-gnu-ld --verbose --target=i486-slackware-linux --host=i486-slackware-linux
 Thread model: posix
 gcc version 3.4.6 
+-----
+* $ gdb -v
+GNU gdb 6.6
+Copyright (C) 2006 Free Software Foundation, Inc.
+GDB is free software, covered by the GNU General Public License, and you are
+welcome to change it and/or distribute copies of it under certain conditions.
+Type "show copying" to see the conditions.
+There is absolutely no warranty for GDB.  Type "show warranty" for details.
+This GDB was configured as "i686-pc-linux-gnu".
+-----
+* $ ldd --version
+ldd (GNU libc) 2.3.6
+Copyright (C) 2005 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+Written by Roland McGrath and Ulrich Drepper.
+-----
+* $ perl --version
+
+This is perl, v5.8.8 built for i486-linux
+
+Copyright 1987-2006, Larry Wall
+
+Perl may be copied only under the terms of either the Artistic License or the
+GNU General Public License, which may be found in the Perl 5 source kit.
+
+Complete documentation for Perl, including FAQ lists, should be found on
+this system using "man perl" or "perldoc perl".  If you have access to the
+Internet, point your browser at http://www.perl.org/, the Perl Home Page.
+
  
 Auflistung der Schritte:
 ========================
@@ -111,9 +142,9 @@ Beschreibung:
 =============
 	Variante 1: Stack based bufferoverflow
         -----------
-	Das ist ein klassisches Bufferoverflow beispiel, der shellcode wird nach einer NOP sled auf den stack "gepusht", gefolgt von
-	einer flut an return addressen. Damit soll sichergestellt sein, dass die return-addresse welche auf den stack gepusht wurde durch
-	eine neue return addresse ueberschrieben wird die in die NOP sled zeigt.
+	Das ist ein klassisches Bufferoverflow beispiel, der shellcode wird nach einer NOP sled auf den stack "gepusht", 
+	gefolgt von einer flut an return addressen. Damit soll sichergestellt sein, dass die return-addresse 
+	welche auf den stack gepusht wurde durch eine neue return addresse ueberschrieben wird die in die NOP sled zeigt.
 	Dabei muss darauf geachtet werden das eines der vielen 4byte words der neuen return addresse genau die 4byte return addresse ueberschreiben,
 	und nicht um ein paar byte verschoben sind.
 
