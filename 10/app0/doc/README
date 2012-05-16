@@ -12,7 +12,9 @@ Abstract:
   vuln1.c and vuln2.c are two classical stack based bufferoverflow examples. 
   These code-snippets and exploits are largely inspired by [1].
   The examples are local bufferoverflows that can be exploited by a unprivileged user,
-  to gain root access through a vulnerable suid programm (vuln1.c, vuln2.c)
+  to gain root access through a vulnerable suid programm (vuln1.c, vuln2.c).
+  The secure versions which limit the number of characters that can be
+  stored in the buffer (by using "strncpy") can be found in sec1.c and sec2.c.
 
 Requirements
 =============
