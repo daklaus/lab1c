@@ -16,10 +16,7 @@ getenvaddr: getenvaddr.c
 exploiter: exploiter.c
 	        $(CC) exploiter.c -o exploiter
 
-getsystem: getsystem.c
-		$(CC) getsystem.c -o getsystem
-
 clean: 
-	        rm vuln1 vuln2 getenvaddr getsystem exploiter && rm *.o
+	        rm vuln1 vuln2 getenvaddr exploiter && rm *.o
 
-all: vuln1 vuln2 getenvaddr exploiter getsystem
+all: vuln1 vuln2 getenvaddr exploiter
